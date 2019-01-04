@@ -71,7 +71,20 @@ func NewBitmexFromCfg(key, secret, baseURL string, cfg *apiclient.TransportConfi
 	b.symbol = "XBTUSD"
 	b.APIKey = key
 	b.APISecret = secret
+	b.setTimeOffset()
 	return b
+}
+
+func (b *Bitmex) setTimeOffset() error {
+	info, err := b.Info()
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	nonce := time.Now().UnixNano()
+	b.trans.timeOffset = nonce/1000000 - info.Timestamp
+	return nil
+
 }
 
 func (b *Bitmex) SetDebug(bDebug bool) {

@@ -19,8 +19,9 @@ import (
 
 type Transport struct {
 	*httptransport.Runtime
-	Key    string
-	Secret string
+	Key        string
+	Secret     string
+	timeOffset int64
 }
 
 func NewTransport(host, basePath, key, secret string, schemes []string) (t *Transport) {
@@ -57,7 +58,7 @@ func (t *Transport) signature(req runtime.ClientRequest, operation *runtime.Clie
 		path += "?" + query.Encode()
 	}
 	nonce := time.Now().UnixNano()
-	expires = strconv.FormatInt(nonce, 10)[:13]
+	expires = strconv.FormatInt(nonce/1000000-t.timeOffset, 10)[:13]
 	var data string
 	switch method {
 	case "GET":
