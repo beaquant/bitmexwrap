@@ -332,13 +332,14 @@ func transPosition(v *models.Position) (pos *Position) {
 		return
 	}
 	pos = &Position{Info: Contract{Symbol: *v.Symbol, Name: *v.Symbol},
-		Type:        orderType,
-		Hold:        float64(v.CurrentQty),
-		ProfitRatio: float64(v.UnrealisedRoePcnt),
-		Price:       v.AvgEntryPrice,
-		CostPrice:   v.AvgCostPrice,
-		LastPrice:   v.LastPrice,
-		MarkPrice:   v.MarkPrice,
+		Type:           orderType,
+		Hold:           float64(v.CurrentQty),
+		ProfitRatio:    float64(v.UnrealisedRoePcnt),
+		Price:          v.AvgEntryPrice,
+		CostPrice:      v.AvgCostPrice,
+		LastPrice:      v.LastPrice,
+		MarkPrice:      v.MarkPrice,
+		ForceLiquPrice: v.LiquidationPrice,
 	}
 	return
 }

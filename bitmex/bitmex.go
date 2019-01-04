@@ -165,16 +165,19 @@ func (b *Bitmex) Positions() (positions []Position, err error) {
 	return b.GetPositions()
 }
 
-// GetPositions get current positions
+// GetPositions get current open positions
 func (b *Bitmex) GetPositions() (positions []Position, err error) {
 	var pos *position.PositionGetOK
-	pos, err = b.api.Position.PositionGet(&position.PositionGetParams{}, nil)
+	filters := `{"isOpen": true, "symbol": "` + b.symbol + `"}`
+	params := position.PositionGetParams{
+		Filter: &filters,
+	}
+	pos, err = b.api.Position.PositionGet(&params, nil)
 	if err != nil {
 		return
 	}
 	var position *Position
 	for _, v := range pos.Payload {
-		//log.Printf("%#v", v)
 		position = transPosition(v)
 		if position == nil {
 			continue
